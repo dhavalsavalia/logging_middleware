@@ -8,41 +8,6 @@ from fastapi import FastAPI, Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
 
-logging_config = {
-    "version":1,
-    "formatters":{
-        "detailed":{
-            "class": "logging.Formatter",
-            "format": (
-                '%(asctime)s|%(process)s|%(levelname)s|%(name)s'
-                '|%(module)s|%(funcName)s|%(lineno)s: %(message)s'
-            ),
-            "datefmt": '%Y-%m-%d %H:%M:%S %z'
-        },
-        "json":{
-            "class":"pythonjsonlogger.jsonlogger.JsonFormatter",
-            "format":"%(asctime)s %(process)s %(levelname)s %(name)s %(module)s %(funcName)s %(lineno)s"
-        }
-    },
-    "handlers":{
-        "console": {
-                "level": "DEBUG",
-                "class": "logging.StreamHandler",
-                "formatter": "detailed",
-                "stream": sys.stderr,
-            }
-    },
-    "root":{
-        "level":"DEBUG",
-        "handlers":[
-            "console"
-        ],
-    "propagate": True
-    }
-}
-
-logger = logging.config.dictConfig(logging_config)
-
 
 class RouterLoggingMiddleware(BaseHTTPMiddleware):
     """
@@ -83,8 +48,6 @@ class RouterLoggingMiddleware(BaseHTTPMiddleware):
 
         """
 
-        print("Laaaaaaa")
-
         path = request.url.path
         if request.query_params:
             path += f"?{request.query_params}"
@@ -97,7 +60,7 @@ class RouterLoggingMiddleware(BaseHTTPMiddleware):
 
         try:
             body = await request.json()
-            request_logging ["body"] = body
+            request_logging["body"] = body
         except:
             body = None
 
